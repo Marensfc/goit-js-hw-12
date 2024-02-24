@@ -1,0 +1,259 @@
+/* Basic styles */
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 100px;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+p {
+  margin: 0;
+}
+
+/* Form styles */
+
+.form {
+  display: flex;
+  justify-content: center;
+  margin-top: 36px;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  margin-bottom: 32px;
+}
+
+.form-input {
+  width: 272px;
+  height: 40px;
+  border: 1px solid #808080;
+  border-radius: 4px;
+  padding: 8px 0 8px 16px;
+}
+
+.form-input:hover {
+  border: 1px solid #000000;
+}
+
+.form-input:focus {
+  outline: transparent;
+  border: 1px solid #4e75ff;
+}
+
+.form-input::placeholder {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
+
+.form-input::-webkit-search-decoration,
+.form-input::-webkit-search-cancel-button,
+.form-input::-webkit-search-results-button,
+.form-input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
+.form-input::-ms-clear {
+  width: 0;
+  height: 0;
+}
+
+.form-btn {
+  width: 91px;
+  height: 40px;
+  font-weight: 500;
+  color: white;
+  background-color: #4e75ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.form-btn:hover {
+  background-color: #6c8cff;
+}
+
+/* Gallery */
+
+.gallery {
+  max-width: 1128px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.gallery-card {
+  border: 1px solid #808080;
+  width: calc((100% - 48px) / 3);
+  overflow: hidden;
+}
+
+.thumb {
+  width: 100%;
+  height: 200px;
+}
+
+.thumb > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.gallery-link-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-card-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.statistic-list {
+  width: 360px;
+  height: 48px;
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  position: absolute;
+  top: 152px;
+  left: 0;
+  padding: 4px 25px 4px 20px;
+}
+
+.statistic-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.statistic-name {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+.statistic-numbers {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 2;
+  letter-spacing: 0.04em;
+}
+
+/* Loader */
+
+.loader {
+  display: block;
+  margin: 0 auto;
+  color: #000000;
+  font-size: 30px;
+  text-indent: -9999em;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  position: relative;
+  transform: translateZ(0);
+  animation: mltShdSpin 1.7s infinite ease, round 1.7s infinite ease;
+}
+
+@keyframes mltShdSpin {
+  0% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  5%,
+  95% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+  10%,
+  59% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.087em -0.825em 0 -0.42em,
+      -0.173em -0.812em 0 -0.44em, -0.256em -0.789em 0 -0.46em,
+      -0.297em -0.775em 0 -0.477em;
+  }
+  20% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+      -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em,
+      -0.749em -0.34em 0 -0.477em;
+  }
+  38% {
+    box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+      -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em,
+      -0.82em -0.09em 0 -0.477em;
+  }
+  100% {
+    box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+      0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+  }
+}
+
+@keyframes round {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Other styles */
+
+.btn-load-more {
+  display: block;
+  margin: 0 auto;
+  margin-top: 32px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background-color: #4e75ff;
+  border: none;
+  border-radius: 8px;
+  width: 125px;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.btn-load-more:hover {
+  background-color: #6c8cff;
+}
+
+.hidden {
+  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}

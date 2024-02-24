@@ -4,10 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gallery</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
+
   <body>
-  
+    <form class="form">
+      <input
+        class="form-input"
+        type="search"
+        name="searchImage"
+        placeholder="Search images..."
+      />
+      <button class="form-btn" type="submit">Search</button>
+    </form>
+
+    <span class="loader hidden"></span>
+
+    <ul class="gallery"></ul>
+
+    <button type="button" class="btn-load-more hidden">Load more</button>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>
