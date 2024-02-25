@@ -1,30 +1,30 @@
 'use strict';
 
 import axios from 'axios';
-
 export class ImagesAPI {
-  constructor(userSearchRequest) {
+  constructor(userSearchRequest, page) {
     this.BASE_URL = 'https://pixabay.com';
     this.ENDPOINT = '/api/';
-    this.KEY = 'key=42471766-4e6ef41ee0191e88bcacb27c7';
-    this.parameters = {
-      q: `&q=${userSearchRequest}`,
-      image_type: '&image_type=photo',
-      orientation: '&orientation=horizontal',
-      safesearch: '&safesearch=true',
+
+    this.PARAMS = {
+      key: '42471766-4e6ef41ee0191e88bcacb27c7',
+      q: userSearchRequest,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      safesearch: 'true',
+      page: page,
+      per_page: 15,
     };
 
-    this.PARAMS = '';
-
-    for (const parameter of Object.values(this.parameters)) {
-      this.PARAMS += parameter;
-    }
-
-    const url = `${this.BASE_URL}${this.ENDPOINT}?${this.KEY}${this.PARAMS}`;
-    this.URL = url;
+    this.URL = `${this.BASE_URL}${this.ENDPOINT}`;
   }
 
-  getImages() {
-    return fetch(this.URL).then(response => response.json());
+  async getImages() {
+    try {
+      const response = await axios.get(this.URL, { params: this.PARAMS });
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 }

@@ -37,5 +37,6 @@ export function createMarkup(images) {
 }
 
 export function markupRender(markup) {
-  gallery.insertAdjacentHTML('afterbegin', markup);
+  gallery.insertAdjacentHTML('beforeend', markup);
 }
+

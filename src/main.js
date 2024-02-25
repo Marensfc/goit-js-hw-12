@@ -22,7 +22,7 @@ const izitoastMessageOptions = {
   timeout: 3000,
 };
 
-export const refs = {
+const refs = {
   form: document.querySelector('.form'),
   inputSearch: document.querySelector('[type="search"]'),
   searchButton: document.querySelector('[type="submit"]'),
@@ -32,40 +32,89 @@ export const refs = {
 };
 
 refs.form.addEventListener('submit', fetchOnPixabayAPI);
+refs.loadButton.addEventListener('click', loadMoreImages);
+
+let page = 1;
+let userValue;
+let isTheSame;
 
 function fetchOnPixabayAPI(evt) {
   evt.preventDefault();
-  refs.gallery.innerHTML = '';
   refs.loader.classList.remove('hidden');
 
-  const userSearchWords = refs.inputSearch.value.trim();
-  const userSearchParams = userSearchWords.split(' ').join('+');
+  const userSearchWords = refs.inputSearch.value.trim(); // валідація даних, які ввів користувач
+  const userSearchParams = userSearchWords.split(' ').join('+'); // валідація даних, які ввів користувач
 
-  if (userSearchWords !== '') {
-    const imagesApi = new ImagesAPI(userSearchParams);
-
-    refs.loader.classList.remove('hidden');
-
-    imagesApi
-      .getImages()
-      .then(data => {
-        refs.form.reset();
-        checkTheSearchResults(data.hits)
-      })
-      .catch(error => {
-        console.log(error);
-        iziToast.show({
-          ...izitoastMessageOptions,
-          message: 'Request error',
-        });
-      })
-      .finally(() => {
-        refs.loader.classList.add('hidden');
-      });
-  } else {
-    refs.loader.classList.add('hidden');
+  if (userSearchWords === '') {
+    refs.loader.classList.add('hidden'); // перевірка на порожній рядок.
     iziToast.show(izitoastMessageOptions);
+    return;
   }
+
+  isTheSame = isTheUserValueTheSame(userSearchParams); // Якщо значення користувача теж саме, функція поверне true, в іншому випадку false.
+
+  if (!isTheSame) {
+    refs.loadButton.classList.add('hidden'); // перевірка, чи значення користувача інше.
+    refs.gallery.innerHTML = '';
+    page = 1;
+  }
+
+  const imagesApi = new ImagesAPI(userSearchParams);
+  refs.form.reset();
+
+  imagesApi
+    .getImages()
+    .then(respData => {
+      checkTheSearchResults(respData.hits);
+
+      if (!(respData.totalHits < 15)) {
+        userValue = userSearchParams;
+        checkQuantityOfElements(respData.totalHits);
+      }
+
+      userValue = userSearchParams;
+    })
+    .catch(error =>
+      iziToast.show({ ...izitoastMessageOptions, message: 'Bad request' })
+    )
+    .finally(() => {
+      refs.loader.classList.add('hidden');
+    });
+}
+
+function checkQuantityOfElements(totalQuantity) {
+  const pagesQuantity = Math.ceil(totalQuantity / 15);
+
+  console.log(totalQuantity);
+
+  if (page <= pagesQuantity) {
+    refs.loadButton.classList.remove('hidden');
+  } else {
+    refs.loadButton.classList.add('hidden');
+    iziToast.show({
+      ...izitoastMessageOptions,
+      message: `We're sorry, but you've reached the end of search results.`,
+      backgroundColor: 'blue',
+    });
+  }
+}
+
+function loadMoreImages() {
+  refs.loadButton.classList.add('hidden');
+  refs.loader.classList.remove('hidden');
+  refs.loader.classList.toggle('under-btn');
+
+  page += 1;
+  const imagesAPI = new ImagesAPI(userValue, page);
+
+  imagesAPI.getImages().then(respData => {
+    checkTheSearchResults(respData.hits);
+
+    checkQuantityOfElements(respData.totalHits);
+
+    refs.loader.classList.add('hidden');
+    refs.loader.classList.toggle('under-btn');
+  });
 }
 
 function checkTheSearchResults(searchResults) {
@@ -77,7 +126,14 @@ function checkTheSearchResults(searchResults) {
       ...izitoastMessageOptions,
       message:
         'Sorry, there are no images matching your search query. Please try again!',
+      backgroundColor: 'red',
     });
+  }
+}
+
+function isTheUserValueTheSame(userSearchParams) {
+  if (page > 1) {
+    return userValue == userSearchParams;
   }
 }
 
