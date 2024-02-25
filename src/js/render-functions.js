@@ -40,3 +40,8 @@ export function markupRender(markup) {
   gallery.insertAdjacentHTML('beforeend', markup);
 }
 
+export function findTheHeightOfLi(){
+  const liElem = document.querySelector('ul > li')
+  const sizeLiElem = liElem.getBoundingClientRect();
+  return sizeLiElem.height;
+}

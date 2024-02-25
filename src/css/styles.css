@@ -1,5 +1,9 @@
 /* Basic styles */
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Montserrat', sans-serif;
   margin-bottom: 100px;
@@ -99,6 +103,7 @@ p {
   flex-wrap: wrap;
   gap: 24px;
   justify-content: center;
+  /* scroll-behavior: smooth; */
 }
 
 .gallery-card {

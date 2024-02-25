@@ -85,8 +85,6 @@ function fetchOnPixabayAPI(evt) {
 function checkQuantityOfElements(totalQuantity) {
   const pagesQuantity = Math.ceil(totalQuantity / 15);
 
-  console.log(totalQuantity);
-
   if (page <= pagesQuantity) {
     refs.loadButton.classList.remove('hidden');
   } else {
@@ -99,7 +97,12 @@ function checkQuantityOfElements(totalQuantity) {
   }
 }
 
-function loadMoreImages() {
+function scrollThePage() {
+  const liElemHeight = renderFunctions.findTheHeightOfLi();
+  window.scrollBy(0, liElemHeight * 2);
+}
+
+async function loadMoreImages() {
   refs.loadButton.classList.add('hidden');
   refs.loader.classList.remove('hidden');
   refs.loader.classList.toggle('under-btn');
@@ -109,11 +112,11 @@ function loadMoreImages() {
 
   imagesAPI.getImages().then(respData => {
     checkTheSearchResults(respData.hits);
-
     checkQuantityOfElements(respData.totalHits);
 
     refs.loader.classList.add('hidden');
     refs.loader.classList.toggle('under-btn');
+    scrollThePage();
   });
 }
 
