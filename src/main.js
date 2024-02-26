@@ -85,7 +85,7 @@ async function fetchOnPixabayAPI(evt) {
 function checkQuantityOfElements(totalQuantity, per_page) {
   const pagesQuantity = Math.ceil(totalQuantity / per_page);
 
-  if (page <= pagesQuantity) {
+  if (page < pagesQuantity) {
     refs.loadButton.classList.remove('hidden');
   } else {
     refs.loadButton.classList.add('hidden');
