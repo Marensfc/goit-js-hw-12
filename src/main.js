@@ -35,15 +35,14 @@ refs.form.addEventListener('submit', fetchOnPixabayAPI);
 refs.loadButton.addEventListener('click', loadMoreImages);
 
 let page = 1;
-let userValue;
-let isTheSame;
+let userFirstValue;
 
-function fetchOnPixabayAPI(evt) {
+async function fetchOnPixabayAPI(evt) {
   evt.preventDefault();
   refs.loader.classList.remove('hidden');
 
-  const userSearchWords = refs.inputSearch.value.trim(); // валідація даних, які ввів користувач
-  const userSearchParams = userSearchWords.split(' ').join('+'); // валідація даних, які ввів користувач
+  const userSearchWords = refs.inputSearch.value.trim(); // валідація даних, які ввів користувач;
+  const userSearchParams = userSearchWords.split(' ').join('+'); // валідація даних, які ввів користувач;
 
   if (userSearchWords === '') {
     refs.loader.classList.add('hidden'); // перевірка на порожній рядок.
@@ -51,10 +50,10 @@ function fetchOnPixabayAPI(evt) {
     return;
   }
 
-  isTheSame = isTheUserValueTheSame(userSearchParams); // Якщо значення користувача теж саме, функція поверне true, в іншому випадку false.
+  const isTheSame = isTheUserValueTheSame(userSearchParams);
 
   if (!isTheSame) {
-    refs.loadButton.classList.add('hidden'); // перевірка, чи значення користувача інше.
+    refs.loadButton.classList.add('hidden');
     refs.gallery.innerHTML = '';
     page = 1;
   }
@@ -62,28 +61,29 @@ function fetchOnPixabayAPI(evt) {
   const imagesApi = new ImagesAPI(userSearchParams);
   refs.form.reset();
 
-  imagesApi
-    .getImages()
-    .then(respData => {
-      checkTheSearchResults(respData.hits);
+  try {
+    const data = await imagesApi.getImages();
 
-      if (!(respData.totalHits < 15)) {
-        userValue = userSearchParams;
-        checkQuantityOfElements(respData.totalHits);
-      }
+    checkTheSearchResults(data.hits);
 
-      userValue = userSearchParams;
-    })
-    .catch(error =>
-      iziToast.show({ ...izitoastMessageOptions, message: 'Bad request' })
-    )
-    .finally(() => {
-      refs.loader.classList.add('hidden');
-    });
+    if (!(data.totalHits < 15)) {
+      checkQuantityOfElements(data.totalHits, imagesApi.PARAMS.per_page);
+      return;
+    }
+
+    refs.loadButton.classList.add('hidden');
+  } catch (error) {
+    iziToast.show(
+      { ...izitoastMessageOptions, message: error.message },
+      console.log(error)
+    );
+  } finally {
+    refs.loader.classList.add('hidden');
+  }
 }
 
-function checkQuantityOfElements(totalQuantity) {
-  const pagesQuantity = Math.ceil(totalQuantity / 15);
+function checkQuantityOfElements(totalQuantity, per_page) {
+  const pagesQuantity = Math.ceil(totalQuantity / per_page);
 
   if (page <= pagesQuantity) {
     refs.loadButton.classList.remove('hidden');
@@ -108,16 +108,22 @@ async function loadMoreImages() {
   refs.loader.classList.toggle('under-btn');
 
   page += 1;
-  const imagesAPI = new ImagesAPI(userValue, page);
 
-  imagesAPI.getImages().then(respData => {
-    checkTheSearchResults(respData.hits);
-    checkQuantityOfElements(respData.totalHits);
+  const imagesAPI = new ImagesAPI(userFirstValue, page);
+
+  try {
+    const data = await imagesAPI.getImages();
+
+    checkTheSearchResults(data.hits);
+    checkQuantityOfElements(data.totalHits, imagesAPI.PARAMS.per_page);
 
     refs.loader.classList.add('hidden');
     refs.loader.classList.toggle('under-btn');
     scrollThePage();
-  });
+  } catch (error) {
+    iziToast.show({ ...izitoastMessageOptions, message: error.message });
+    refs.loader.classList.add('hidden');
+  }
 }
 
 function checkTheSearchResults(searchResults) {
@@ -134,10 +140,13 @@ function checkTheSearchResults(searchResults) {
   }
 }
 
-function isTheUserValueTheSame(userSearchParams) {
-  if (page > 1) {
-    return userValue == userSearchParams;
+function isTheUserValueTheSame(userNewValue) {
+  if (page === 1) {
+    userFirstValue = userNewValue;
+    return;
   }
+
+  return userFirstValue == userNewValue;
 }
 
 function createModalWindows() {
