@@ -12,7 +12,7 @@ export class ImagesAPI {
       orientation: 'horizontal',
       safesearch: 'true',
       page: page,
-      per_page: 150,
+      per_page: 15,
     };
 
     this.URL = `${this.BASE_URL}${this.ENDPOINT}`;
